@@ -24,7 +24,16 @@ if (isset($_POST["dodaj"])) {
     mysqli_query($conn, $sql) or die("Problem z połączeniem");
 }
 
-$sql = "SELECT * FROM `film`;";
+if (isset($_POST["searchTitle"])) {
+    $titleT = $_POST["title"];
+    $sql = "SELECT * FROM `film` WHERE `Title` LIKE '%$titleT%';";
+} else if (isset($_POST["searchDate"])) {
+    $dateT = $_POST["date"];
+    $sql = "SELECT * FROM `film` WHERE `ProductionDate` LIKE '%$dateT%';";
+} else {
+    $sql = "SELECT * FROM `film`;";
+}
+
 $result = mysqli_query($conn, $sql) or die("Problem z połączeniem");
 
 ?>
@@ -54,6 +63,26 @@ $result = mysqli_query($conn, $sql) or die("Problem z połączeniem");
 
         <input type="submit" name="dodaj" value="dodaj">
     </form>
+
+    <br>
+
+    <form method="POST">
+        <label for="title">Title: </label>
+        <input type="text" name="title" /><br>
+
+        <input type="submit" name="searchTitle" value="search">
+    </form>
+
+    <br>
+
+    <form method="POST">
+        <label for="date">Production date: </label>
+        <input type="date" name="date" /><br>
+
+        <input type="submit" name="searchDate" value="search">
+    </form>
+
+    <br>
 
     <table>
         <?php
