@@ -2,7 +2,12 @@
 
 $conn = mysqli_connect("localhost", "root", "", "filmwebsite");
 
-if (isset($_POST["dodaj"])) {
+if (isset($_POST["delete"])) {
+    $idT = $_POST["id"];
+
+    $sql = "DELETE FROM `film` WHERE `Id` = $idT;";
+    mysqli_query($conn, $sql) or die("Problem z połączeniem");
+} else if (isset($_POST["dodaj"])) {
     $titleT = $_POST["title"];
     $dateT = $_POST["date"];
     $descriptionT = $_POST["description"];
@@ -84,25 +89,32 @@ $result = mysqli_query($conn, $sql) or die("Problem z połączeniem");
 
     <br>
 
-    <table>
-        <?php
-        while ($row = mysqli_fetch_row($result)) {
-            echo '<tr>';
+    <form method="post">
+        <table>
+            <?php
+            while ($row = mysqli_fetch_row($result)) {
+                echo '<tr>';
 
-            for ($i = 0; $i < 6; $i++) {
-                echo '<th style="padding: 0 2px">';
-                if ($i == 3)
-                    echo '<img height="50px" src="' . $row[$i] . '"></img>';
-                else
-                    echo $row[$i];
+                for ($i = 0; $i < 6; $i++) {
+                    echo '<th style="padding: 0 2px">';
+                    if ($i == 3)
+                        echo '<img height="50px" src="' . $row[$i] . '"></img>';
+                    else
+                        echo $row[$i];
 
+                    echo '</th>';
+                }
+
+                echo '<th>';
+                echo '<input style="display: none;" type="text" name="id" value="' . $row[0] . '">';
+                echo '<input type="submit" name="delete" value="Delete">';
                 echo '</th>';
-            }
 
-            echo '</tr>';
-        }
-        ?>
-    </table>
+                echo '</tr>';
+            }
+            ?>
+        </table>
+    </form>
 </body>
 
 </html>
